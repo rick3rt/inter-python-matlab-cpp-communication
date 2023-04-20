@@ -16,7 +16,12 @@
 
 #include "helper.hpp"
 
+#ifdef MEX
+#include "mex.h"
+void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
+#else
 int main(int argc, char *argv[])
+#endif
 {
     const std::string endpoint = "tcp://*:4242";
 
@@ -31,8 +36,14 @@ int main(int argc, char *argv[])
     std::cout << "Connecting to " << endpoint << "..." << std::endl;
     socket.bind(endpoint);
 
+#ifdef MEX
+    std::cout << "Sending Message in 2 sec" << std::endl;
+    std::this_thread::sleep_for(std::chrono::seconds(2));
+    std::cout << "Sending Message." << std::endl;
+#else
     std::cout << "Press any key to send message..."; // << std::endl;
     std::cin.get();
+#endif
 
     zmqpp::message message;
     auto t_tx = timestamp();
@@ -44,5 +55,7 @@ int main(int argc, char *argv[])
     // std::cout << "Sent message." << std::endl;
     std::cout << "Finished." << std::endl;
 
+#ifndef MEX
     return 0;
+#endif
 }

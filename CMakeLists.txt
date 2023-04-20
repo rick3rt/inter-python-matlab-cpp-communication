@@ -33,20 +33,21 @@ endforeach()
 
 # =============================================================================
 # utility to copy executables to bin folder
-function(exec_copy_to_bin_folder)
-    add_custom_command(TARGET ${PROJECT_NAME}
+function(exec_copy_to_bin_folder INPUT_TARGET_NAME)
+    add_custom_command(TARGET ${INPUT_TARGET_NAME}
         POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_SOURCE_DIR}/bin/
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:${PROJECT_NAME}> ${CMAKE_SOURCE_DIR}/bin/
-        COMMAND ${CMAKE_COMMAND} -E $<IF:$<CONFIG:Debug>,copy_if_different,true> $<TARGET_FILE_DIR:${PROJECT_NAME}>/${PROJECT_NAME}.pdb ${CMAKE_SOURCE_DIR}/bin/
-        COMMAND ${CMAKE_COMMAND} -E $<IF:$<CONFIG:RelWithDebInfo>,copy_if_different,true> $<TARGET_FILE_DIR:${PROJECT_NAME}>/${PROJECT_NAME}.pdb ${CMAKE_SOURCE_DIR}/bin/
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:${INPUT_TARGET_NAME}> ${CMAKE_SOURCE_DIR}/bin/
+        COMMAND ${CMAKE_COMMAND} -E $<IF:$<CONFIG:Debug>,copy_if_different,true> $<TARGET_FILE_DIR:${INPUT_TARGET_NAME}>/${INPUT_TARGET_NAME}.pdb ${CMAKE_SOURCE_DIR}/bin/
+        COMMAND ${CMAKE_COMMAND} -E $<IF:$<CONFIG:RelWithDebInfo>,copy_if_different,true> $<TARGET_FILE_DIR:${INPUT_TARGET_NAME}>/${INPUT_TARGET_NAME}.pdb ${CMAKE_SOURCE_DIR}/bin/
     )
 endfunction()
 
 # =============================================================================
 # PROJECT CONFIGURATION
 # =============================================================================
-find_package(zmqpp)
+find_package(zmqpp 4.2 REQUIRED)
+find_package(Matlab 9.6)
 
 # setup common include dirs and libraries
 include_directories(BEFORE include)

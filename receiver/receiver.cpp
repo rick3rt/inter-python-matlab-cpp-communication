@@ -16,7 +16,12 @@
 
 #include "helper.hpp"
 
+#ifdef MEX
+#include "mex.h"
+void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
+#else
 int main(int argc, char *argv[])
+#endif
 {
     const std::string endpoint = "tcp://localhost:4242";
 
@@ -51,5 +56,7 @@ int main(int argc, char *argv[])
 
     std::cout << "Finished." << std::endl;
 
+#ifndef MEX
     return 0;
+#endif
 }
